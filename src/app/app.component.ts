@@ -82,31 +82,31 @@ export class AppComponent implements OnInit {
 
     // Pobieranie danych z api w trakcie uruchomienia programu
     ngOnInit() {
-      for(let i=0; i<this.wydzialDropDown$.length; i++){
+    //   for(let i=0; i<this.wydzialDropDown$.length; i++){
 
-        this.item$ =  this.wydzialDropDown$[i];
-      this.urlForSlug$ = this.httpService.getUrlForSlug(this.item$, this.selectedYear$).pipe(map(o => o.syllabus),
-      map(syllabus => syllabus.study_types
-        .flatMap(studyType => studyType.levels
-          .flatMap(level => level.study_programmes
-          .flatMap(subject => subject.url))))
-        );
+    //     this.item$ =  this.wydzialDropDown$[i];
+    //   this.urlForSlug$ = this.httpService.getUrlForSlug(this.item$, this.selectedYear$).pipe(map(o => o.syllabus),
+    //   map(syllabus => syllabus.study_types
+    //     .flatMap(studyType => studyType.levels
+    //       .flatMap(level => level.study_programmes
+    //       .flatMap(subject => subject.url))))
+    //     );
 
-    this.urlForSlug$.subscribe((res : string[]) => {
-        //console.log(res);
-        this.listOfUrl = res;
-        console.log(this.listOfUrl[0]);
+    // this.urlForSlug$.subscribe((res : string[]) => {
+    //     //console.log(res);
+    //     this.listOfUrl = res;
+    //     console.log(this.listOfUrl[0]);
 
-        for(let j=0; j < this.listOfUrl.length; j++){
-          this.slugNumberInUrl = this.listOfUrl[j].lastIndexOf("/");  // podaje numer ostatniego wystąpienia wystąpienia podtekstu
+    //     for(let j=0; j < this.listOfUrl.length; j++){
+    //       this.slugNumberInUrl = this.listOfUrl[j].lastIndexOf("/");  // podaje numer ostatniego wystąpienia wystąpienia podtekstu
 
-          this.slug$.push(this.listOfUrl[j].substr(this.slugNumberInUrl + 1 )); // pobiera kawałek tekstu, pramter to poczatek pobieranego kawałka tekstu
-          //this.k++;
-          //console.log(this.slug$);
-          }
-          //this.k--;
-      });
-    }
+    //       this.slug$.push(this.listOfUrl[j].substr(this.slugNumberInUrl + 1 )); // pobiera kawałek tekstu, pramter to poczatek pobieranego kawałka tekstu
+    //       //this.k++;
+    //       //console.log(this.slug$);
+    //       }
+    //       //this.k--;
+    //   });
+    // }
 }
 
       onChange(event) {
