@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-success"> Show faculty</button>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+      <div class="btn-group">
+        <button type ="button"
+        class = "btn btn-primary dropdown-toggle">
+      Select <span class="caret"></span></button>
+      <button>
+        <ul class="dropdown-menu">
+          <li><a href="#">Ala ma kota</a></li>
+          <li><a href="#">Karol ma kota</a></li>
+          <li><a href="#">Antek nie ma kota</a></li>
+        </ul>
+      </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="#">HTML</a></li>
+        <li><a href="#">CSS</a></li>
+        <li><a href="#">JavaScript</a></li>
+      </ul>
+    </div>
+
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <a
+    href="#"
+    class= "list-group-item clearfix"
+    *ngFor="let faculty of faculty$.name$">
+    <div class="pull-left">
+        <h4 class="list-group-item-heading"> {{ faculty }}</h4>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+
+<app-faculty-single> </app-faculty-single>

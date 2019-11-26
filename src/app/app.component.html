@@ -1,19 +1,49 @@
-<button (click)="getKot()"> getKot </button>
+<app-header></app-header>
+<app-faculties></app-faculties>
 
-<button (click) ="getSubjects()"> getSubjects</button>
+<div class="container">
+  <div class= "row">
+    <div class="col-xs-12">
+      <h3> Engineering Thesis </h3>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-primary"> Button Test Bootstrap</button>
+
+<button (click)="getSubjectsWithQueryInLecture()"> getKot </button>
+
+<button class= "btn btn-primary" [disabled]="query$ === '' " (click) ="getSubjectsWithQuery()"> getSubjectsWithQuery</button>
+
+<button (click) ="getSubjectsWithName()"> getSubjectsWithNameOnFields</button>
 
 <button (click) ="getPosts()"> getPosts</button>
 
-{{allSubjects$ | async}}
+<button (click) ="getUrlForSlug()"> getUrlForSlug </button>
 
-<!-- <div *ngFor= "let p of FieldsOfStudy$ | async">
-   {{p}}
-</div> -->
+<button (click) ="foundSlugInUrl()"> number slug in url</button>
+
+<button (click) ="getAllSubjectsWithName()"> getAllSubjectsWithNameInYear </button>
+
+<!-- {{allSubjects$ | async}} -->
+{{allPosts$ | async}}
+
+<!-- {{testowyNgOnInit$ | async}} -->
+
+
 
 
 <!-- <div class="example-config">
   <kendo-dropdownlist [data]="listOfFaculties" [(ngModel)]="selectedvalue"></kendo-dropdownlist>
 </div> -->
+
+<button (click)="getTwoPhasesSimple()">getTwoPhasesSimple</button>
+
+<button (click)="getTwoPhasesAdvanced()">getTwoPhasesAdvanced</button>
+
+<pre>{{twoPhasesSimple | async}}</pre>
+<pre>{{twoPhasesAdvanced | async}}</pre>
 
 
 
@@ -25,19 +55,99 @@
 
 <button (click) ="getFieldsOfStudy()"> getFieldsOfStudy</button>
 
-Semestr: <input type= "text" [(ngModel)]="semestr$">
+Semestr: <input type= "text" class="form-control" [(ngModel)]="semestr$">
 Wydział: <input type= " text" [(ngModel)] = "wydzial$">
+Szukaj: <input type= " text" [(ngModel)] = "query$">
 
 <!-- {{FieldsOfStudy$ | async}} -->
 <!-- {{list$}} -->
 
-<div *ngFor= "let p of FieldsOfStudy$ | async">
+<!-- <div *ngFor= "let p of FieldsOfStudy$ | async">
    {{p}}
-</div>
-
-<!-- proba wyswietlania pojedynczych name'ow -->
-<!-- <div *ngFor= "let k of allSubjects$ | async">
-  {{k}}
 </div> -->
+<p> Studia Stacjonarne I stopnia</p>
+<ng-container *ngFor="let p of FieldsOfStudy$ | async">
+  <div *ngIf="p.type === 'Stacjonarne' && p.level==='Studia I stopnia'">
+  <!-- {{p.type}} -->
+  <!-- {{p.level}} -->
+  {{p.subject}}
+  </div>
+</ng-container>
 
+<p>Studia Stacjonarne II stopnia</p>
+<ng-container *ngFor="let p of FieldsOfStudy$ | async">
+  <div *ngIf="p.type === 'Stacjonarne' && p.level==='Studia II stopnia'">
+  <!-- {{p.type}} -->
+  <!-- {{p.level}} -->
+  {{p.subject}}
+  </div>
+</ng-container>
+
+<p>Studia Stacjonarne III stopnia</p>
+<ng-container *ngFor="let p of FieldsOfStudy$ | async">
+  <div *ngIf="p.type === 'Stacjonarne' && p.level==='Studia III stopnia'">
+  <!-- {{p.type}} -->
+  <!-- {{p.level}} -->
+  {{p.subject}}
+  </div>
+</ng-container>
+
+<p>Studia Niestacjonarne</p>
+<ng-container *ngFor="let p of FieldsOfStudy$ | async">
+    <div *ngIf="p.type === 'Niestacjonarne'">
+    <!-- {{p.type}} -->
+    {{p.level}}
+    {{p.subject}}
+    </div>
+  </ng-container>
+
+<ng-template #stacjonarne>
+<p>Studia Stacjonarne</p>
+</ng-template>
+
+<form>
+    <div *ngFor= "let subject of allSubjectsLecture$ | async">
+       {{subject.classesHours}}
+     </div>
+</form>
+
+<form>
+    <div *ngFor= "let subject of allSubjectsWithQuery$ | async" >
+        {{subject}}
+     </div>
+</form>
+
+<form>
+<div *ngFor= "let subject of allSubjects$ | async" (mouseover)="fireEvent(subject.description)" (click)= "clickSubject()">
+    <input type= "checkbox" ([ngModel])="subject" > {{subject.name}} {{subject.code}}
+ </div>
+</form>
+
+
+<div *ngFor= "let subject of allSubjectsInYear$ | async">
+    {{subject.name}}
+ </div>
+
+<!-- <div *ngFor= "let url of urlForSlug$ | async">
+    {{url}}
+ </div> -->
+
+ <select>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </select>
+
+
+
+  <h1>My Application</h1>
+<select [(ngModel)]="selectedFaculty$" (ngModelChange)="onChange($event)">
+  <option type= "checkbox" *ngFor="let c of wydzialDropDown$; let i=index" [ngValue]="c">{{c}}</option>
+</select>
+
+
+<select [(ngModel)]="selectedYear$">
+    <option *ngFor="let c of semestrDropDown$" [ngValue]="c">{{c}}</option>
+  </select>
 
