@@ -1,50 +1,93 @@
 <div class="row">
-  <div class="col-xs-12">
-    <button class="btn btn-success"> Show faculty</button>
-  </div>
-</div>
-
-<div class="row">
     <div class="col-xs-12">
-      <div class="btn-group">
-        <button type ="button"
-        class = "btn btn-primary dropdown-toggle">
-      Select <span class="caret"></span></button>
-      <button>
-        <ul class="dropdown-menu">
-          <li><a href="#">Ala ma kota</a></li>
-          <li><a href="#">Karol ma kota</a></li>
-          <li><a href="#">Antek nie ma kota</a></li>
+      <button class="btn btn-success"  [disabled]="query$ === '' " (click)="getFieldsOfStudy()"> Select Year</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div
+        class="btn-group"
+        appDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle">
+          2017-2018 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" >
+          <li *ngFor="let c of faculty$.year$; let i=index" >
+            <a class="dropdown-item" href="#" (click)= onChange(c)> {{ c }} </a>
+          </li>
         </ul>
-      </button>
       </div>
     </div>
   </div>
 
-  <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
-      <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li><a href="#">HTML</a></li>
-        <li><a href="#">CSS</a></li>
-        <li><a href="#">JavaScript</a></li>
-      </ul>
+
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <a
+      href="#"
+      class= "list-group-item clearfix"
+      *ngFor="let faculty of faculty$.name$, let i=index">
+      <div class="pull-left">
+          <h4 class="list-group-item-heading" (click)="fields(i)"> {{ faculty }} </h4>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+        <div class="col-md-12">
+      <a
+      href="#"
+      class= "list-group-item"
+       *ngFor="let p of FieldsOfStudy$ | async, let i=index">
+          <div class= "list-group-item-text" (click) = "testowy2(i)" >
+          <!-- {{p.type}} -->
+          <!-- {{p.level}} -->
+          {{p.subject}}
+           </div>
+
+      </a>
+    </div>
     </div>
 
-<hr>
-<div class="row">
+  </div>
+
+
+  <hr>
+  <!-- <div class="row">
+    <div class="col-xs-12">
+      <a
+      href="#"
+      class= "list-group-item"
+      *ngFor= "let subject of allSubjects$ | async" >
+       <div class= "list-group-item-text" >
+        {{subject.name}}
+       </div>
+      </a>
+
+    </div>
+  </div> -->
+
+
+<!-- próba komunikacji między komponentami, reszta w faculty-single.component.ts i faculty-single.component.html -->
+  <div class="row">
   <div class="col-xs-12">
-    <a
-    href="#"
-    class= "list-group-item clearfix"
-    *ngFor="let faculty of faculty$.name$">
-    <div class="pull-left">
-        <h4 class="list-group-item-heading"> {{ faculty }}</h4>
-      </div>
-    </a>
-
+      <app-faculty-single
+        [faculty]="allSubjects$"
+        ></app-faculty-single>
+    </div>
   </div>
-</div>
 
 
-<app-faculty-single> </app-faculty-single>
+
+
+  <!-- <app-faculty-single> </app-faculty-single> -->
+

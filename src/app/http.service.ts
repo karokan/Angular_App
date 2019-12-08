@@ -25,6 +25,10 @@ export class HttpService {
     Accept: 'application/vnd.syllabus.agh.edu.pl.v2+json'
   });
 
+  headerForIdModule = new HttpHeaders({
+    'Accept-Language': 'pl'
+  });
+
 
   getAllModulesByStudyMode(year: string = '2017-2018', department: string = 'weaiiib', slug: string = 'stacjonarne-informatyka--3'): Observable<any> {
     return this.http.get(`https://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${department}/study_plans/${slug}/modules?fields=name,module-code`, {
@@ -48,7 +52,7 @@ getUrlForSlug(kierunek: string, rok: string): Observable<any> {
   //// testowy get do eksperymentowania ze scieżkami
   getPosts(): Observable<any> {
     // tslint:disable-next-line: max-line-length
-    return this.http.get(`https://syllabuskrk.agh.edu.pl/2017-2018/magnesite/api/faculties/weaiiib/study_plans/stacjonarne-automatyka-i-robotyka--5/modules?fields=name,description,module-activities `, {
+    return this.http.get(`https://syllabuskrk.agh.edu.pl/2017-2018/magnesite/api/faculties/weaiiib/study_plans/stacjonarne-automatyka-i-robotyka--5/modules?`, {
       headers: this.headers}
       );
     }
@@ -66,6 +70,22 @@ getUrlForSlug(kierunek: string, rok: string): Observable<any> {
   // Wszystkie kierunki studiów na danym wydziale na danym semestrze
   getFieldsOfStudy(rok: string, wydzial: string): Observable<any> {
     return this.http.get(`https://syllabuskrk.agh.edu.pl/${rok}/magnesite/api/faculties/${wydzial}/study_plans`, {
+      headers: this.headers}
+      );
+  }
+
+
+  // pobieram wszystkie przedmioty z wydział + przesyłam kierunek // potrzebny slug kierunku 'kierunek' | modules?field = atrybuty
+  getDataForSearch(kierunek: string, rok: string): Observable<any> {
+    // tslint:disable-next-line: max-line-lengths
+    return this.http.get(`https://syllabuskrk.agh.edu.pl/${rok}/magnesite/api/faculties/weaiiib/study_plans/${kierunek}/modules?`, {
+      headers: this.headers}
+      );
+  }
+
+  getDataFromModuleId(moduleId: string): Observable<any> {
+    // tslint:disable-next-line: max-line-lengths
+    return this.http.get(`https://syllabuskrk.agh.edu.pl/api/current_annual/modules/${moduleId}/`, {
       headers: this.headers}
       );
   }

@@ -1,5 +1,18 @@
-<app-header></app-header>
-<app-faculties></app-faculties>
+<app-header (featureSelected)="onNavigate($event)"> </app-header>
+<div class="container">
+  <div class="row">
+    <div clas="col-md-12">
+        <app-faculties *ngIf= "loadedFeature === 'faculty'"></app-faculties>
+        <app-blank-fields-list *ngIf ="loadedFeature === 'blank-field'"></app-blank-fields-list>
+        <app-search-subject-list *ngIf= "loadedFeature === 'search-subject'"> </app-search-subject-list>
+    </div>
+  </div>
+</div>
+
+<!-- <app-faculties></app-faculties>
+<app-faculty-list></app-faculty-list> -->
+
+
 
 <div class="container">
   <div class= "row">
@@ -26,8 +39,16 @@
 
 <button (click) ="getAllSubjectsWithName()"> getAllSubjectsWithNameInYear </button>
 
+<button (click) = "checkIfFilledDescription()"> sprawdz czy opisy są wypełnione </button>
+
+<button class= "btn btn-primary" [disabled]="query$ === '' " (click)="getSubjectsWithQueryInLecture()"> getSubjectsWithQueryInLecture </button>
+
+<button (click)="getSubjectsWithQueryInLecturev2()"> getSubjectsWithQueryInLecturev2 </button>
+
+<button class= "btn btn-primary" [disabled]="query$ === '' " (click)="getSubjectsWithQueryInLecturev3()"> getSubjectsWithQueryInLecturev3 </button>
+
 <!-- {{allSubjects$ | async}} -->
-{{allPosts$ | async}}
+<pre>{{allPosts$ | async}}</pre>
 
 <!-- {{testowyNgOnInit$ | async}} -->
 
@@ -105,11 +126,7 @@ Szukaj: <input type= " text" [(ngModel)] = "query$">
 <p>Studia Stacjonarne</p>
 </ng-template>
 
-<form>
-    <div *ngFor= "let subject of allSubjectsLecture$ | async">
-       {{subject.classesHours}}
-     </div>
-</form>
+
 
 <form>
     <div *ngFor= "let subject of allSubjectsWithQuery$ | async" >
@@ -122,6 +139,8 @@ Szukaj: <input type= " text" [(ngModel)] = "query$">
     <input type= "checkbox" ([ngModel])="subject" > {{subject.name}} {{subject.code}}
  </div>
 </form>
+
+
 
 
 <div *ngFor= "let subject of allSubjectsInYear$ | async">
@@ -150,4 +169,56 @@ Szukaj: <input type= " text" [(ngModel)] = "query$">
 <select [(ngModel)]="selectedYear$">
     <option *ngFor="let c of semestrDropDown$" [ngValue]="c">{{c}}</option>
   </select>
+
+<!-- sprawdzanie czy description jest uzupelniony  -->
+<form>
+    <div *ngFor= "let subject of getDescriptionOfSubjects$ | async" >
+        <div *ngIf=" subject.description==='Do wypełnienia' || subject.description==='.' || !subject.description">
+          {{subject.name}} {{subject.description}}
+        </div>
+     </div>
+</form>
+
+
+<pre>{{allSubjectsLecture$ | async}}</pre>
+
+<!--
+    <div *ngFor= "let x of allSubjectsLecture$ | async; let i=index"  (click)= "clickSubject(i)" >
+       <div *ngFor= "let p of x.activities">
+        {{x.name}}
+        {{p.description}}
+       </div>
+    </div> -->
+
+    <!-- Sprawdzanie czy uzupełnione, click nie działa bo te slugi źle wypisuje -->
+    <!-- sprawdza  description, notice i wyświetla url w którym to jest miejscu-->
+
+     <!-- <form>
+        <div *ngFor= "let x of allSubjectsLecture$ | async let i=index ">
+          <div *ngIf= "x.module.description ==='Do wypełnienia' || x.module.description==='.' || !x.module.description" (click)= "clickSubject(i)" >
+           Description do wypełnienia: {{x.module.name}}
+          </div>
+          <div *ngIf="x.notices === '-' || !x.notices" (click)= "clickSubject(i)">
+            Notices do wypełnienia: {{x.module.name}}
+            Module URL: {{x.module_url}}
+          </div>
+         </div>
+    </form> -->
+
+
+    <!-- <form>
+        <div *ngFor= "let x of allSubjectsLecture$ | async let i=index ">
+          {{x.module_url}}
+          {{x.module.name}}
+         </div>
+    </form> -->
+
+
+    <!-- <form>
+        <div *ngFor= "let x of allSubjectsLecture$ | async let i=index ">
+           {{x.module.name}}
+         </div>
+    </form> -->
+
+
 

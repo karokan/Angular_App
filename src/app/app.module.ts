@@ -12,6 +12,9 @@ import { FacultiesComponent } from './faculties/faculties.component';
 import { FacultyListComponent } from './faculties/faculty-list/faculty-list.component';
 import { FacultyFieldsComponent } from './faculties/faculty-fields/faculty-fields.component';
 import { FacultySingleComponent } from './faculties/faculty-list/faculty-single/faculty-single.component';
+import { DropdownDirective } from './shared/dropdown.directive';
+import { BlankFieldsListComponent } from './blankFields/blank-fields-list/blank-fields-list.component';
+import { SearchSubjectListComponent } from './searchSubject/search-subject-list/search-subject-list.component';
 
 
 @NgModule({
@@ -21,13 +24,17 @@ import { FacultySingleComponent } from './faculties/faculty-list/faculty-single/
     FacultiesComponent,
     FacultyListComponent,
     FacultyFieldsComponent,
-    FacultySingleComponent
+    FacultySingleComponent,
+    DropdownDirective,
+    BlankFieldsListComponent,
+    SearchSubjectListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
+    FormsModule
+
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]

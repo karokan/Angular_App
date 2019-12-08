@@ -5,14 +5,17 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li> <a href="#"> Faculties </a> </li>
+        <li> <a href="#" (click)="onSelect('faculty')"> Faculties </a> </li>
+        <li> <a href="#" > Compare Fields Of Study </a> </li>
+        <li> <a href="#" (click)="onSelect('blank-field')" > Search blank fields </a> </li>
+        <li> <a href="#" (click)="onSelect('search-subject')"> Search a subject </a> </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" role="button" >Manage <span class="caret"></span></a>
+        <li class="dropdown" appDropdown>
+          <a href="#" class="dropdown-toggle" role="button" > Show <span class="caret"></span></a>
           <ul class= "dropdown-menu">
-            <li><a href="#">Save data</a></li>
-            <li><a href="#">Fetch data</a></li>
+            <li><a href="#">Show all subjects on Faculty on academy</a></li>
+            <li><a href="#">Show all subjects on academy</a></li>
 
           </ul>
         </li>

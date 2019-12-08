@@ -35,6 +35,8 @@ export class AppComponent implements OnInit {
   allSubjectsInYear$: Observable<any>;
   allSubjectsLecture$: Observable<any>;
   allSubjectsWithQuery$: Observable<any>;
+  getDescriptionOfSubjects$: Observable<any>;
+  allSubjectsWithIdAndQuery$: Observable<any>;
   FieldsOfStudy$: Observable<any>;
   SubjectsField$: Observable<any>;
   allPosts$: Observable<any>;
@@ -62,6 +64,11 @@ export class AppComponent implements OnInit {
   temporary$: string[]=[];
   query$: string ='';
 
+  loadedFeature = 'faculty';
+
+  onNavigate(feature: string){
+    this.loadedFeature = feature;
+  }
 
     // getSubjectsField(){
     //   this.SubjectsField$ = this.httpService.getSubjectsField().pipe(
@@ -82,6 +89,11 @@ export class AppComponent implements OnInit {
 
     // Pobieranie danych z api w trakcie uruchomienia programu
     ngOnInit() {
+
+      this.onChange(this.selectedFaculty$);
+
+
+
     //   for(let i=0; i<this.wydzialDropDown$.length; i++){
 
     //     this.item$ =  this.wydzialDropDown$[i];
@@ -118,7 +130,7 @@ export class AppComponent implements OnInit {
             .flatMap(subject => subject.url))))
           );
 
-      this.urlForSlug$.subscribe((res : string[]) => {
+              this.urlForSlug$.subscribe((res : string[]) => {
           //console.log(res);
           this.listOfUrl = res;
           console.log(this.listOfUrl[0]);
@@ -138,8 +150,10 @@ fireEvent(event){
   console.log("Mouse działa:" + event);
 }
 
-clickSubject(){
-  console.log("kliknąłeś w PRZEDMIOT !!!!!!!!!!!!!!!!!")
+
+clickSubject(i){
+  console.log("kliknąłeś w PRZEDMIOT !!!!!!!!!!!!!!!!!");
+  console.log(this.slug$[i]);
 }
 
   // uses result of one http call to perform another
@@ -148,7 +162,7 @@ clickSubject(){
       map(o => o.syllabus.assignments[0].assignment.module_code),               // take the result of first http call and map it to module code of first assignment
       flatMap(moduleId => this.httpService.getModuleByStudyMode(moduleId)),     // maps moduleId to another http call. map would be used then we would have Observale<Oservable<any>>. flatMap unpacks inner observable. so we have Observale<any>
       map(o => JSON.stringify(o.syllabus.assignments[0].assignment, null, 2))   // maps result of second call to something that we could display
-    )
+    );
   }
 
 
@@ -178,7 +192,7 @@ clickSubject(){
       // now turn it back to an observable that contains single array
       toArray()
       // observable<array<string>>
-    )
+    );
   }
 
 
@@ -189,7 +203,7 @@ clickSubject(){
       this.kierunek$ = this.testArray$[i];
       console.log(this.kierunek$);
       this.allPosts$ = this.httpService.getPosts().pipe(
-      map(o => JSON.stringify(o) + 'hkjhk')
+        map(o => JSON.stringify(o, null, 2))
     );
     }
 
@@ -266,8 +280,7 @@ clickSubject(){
     // })
 
 
-   // pobieram wszystkie przedmioty z wydziału, pobiera kierunki z zainicjalizowanej tablicy (trzeba zrobić tak żeby pobierało
-  // tylko nazwy kierunków a nie wszystkie dane)
+   // pobieram wszystkie przedmioty z wydziału, pobiera kierunki z zainicjalizowanej tablicy
   getSubjectsWithName() {
     this.allSubjects$ = from(this.slug$).pipe(
       flatMap(slug => this.httpService.getSubjects(slug, this.selectedYear$).pipe(
@@ -276,7 +289,7 @@ clickSubject(){
             name: assignmentWrapper.assignment.module.name,
             code: assignmentWrapper.assignment.module_code,
             description: assignmentWrapper.assignment.module.description
-          }}))
+          };}))
         )),
       flatMap(a => from(a)),
       toArray()
@@ -284,14 +297,32 @@ clickSubject(){
     );
   }
 
-  // pobieram wszystkie nazwy, wszystkich przedmiotów na danym roku
+  // nie działa, próba pobrania name i code razem z filtrowaniem
+  // getSubjectsWithNameWithId() {
+  //   this.allSubjectsWithIdAndQuery$ = from(this.slug$).pipe(
+  //     flatMap(slug => this.httpService.getSubjects(slug, this.selectedYear$).pipe(
+  //       map(o => o.syllabus.assignments
+  //         .map(assignmentWrapper => { return {
+  //           name: assignmentWrapper.assignment.module.name,
+  //           code: assignmentWrapper.assignment.module_code,
+  //         };}))
+  //       )),
+  //     flatMap(a => from(a)),
+  //     filter((subject: string) => subject.indexOf(this.query$) >= 0),
+  //     toArray(),
+  //     map(a => {console.log(a); return a;})
+  //     //map(a => {console.log(a); return a;})
+  //   );
+  // }
+
+  // pobieram wszystkie nazwy, wszystkich przedmiotów na danym roku // potrzebna jest linijka numer 96 w ngOnInit
   getAllSubjectsWithName() {
     this.allSubjectsInYear$ = from(this.slug$).pipe(
       flatMap(slug => this.httpService.getSubjects(slug, this.selectedYear$).pipe(
         map(o => o.syllabus.assignments
           .map(assignmentWrapper => { return {
             name: assignmentWrapper.assignment.module.name,
-          }}))
+          };}))
         )),
       flatMap(a => from(a)),
       toArray()
@@ -299,31 +330,14 @@ clickSubject(){
     );
   }
 
-  // nie działa, próba dostania się do description przedmiotu (tego głębszego)
-  getSubjectsWithQueryInLecture() {
-    this.allSubjectsLecture$ = from(this.slug$).pipe(
-      flatMap(slug => this.httpService.getSubjects(slug, this.selectedYear$).pipe(
-        map(o => o.syllabus.assignments
-          .map(assignmentWrapper => assignmentWrapper.module
-            .map(moduleActivitiesWrapper => moduleActivitiesWrapper.module_activities
-              .map(moduleActivityWrapper => {return{
-                classesHours: moduleActivityWrapper.module_activity.classes_hours
-              }})
-              ))))),
 
-
-      flatMap(a => from(a)),
-      toArray()
-      //map(a => {console.log(a); return a;})
-    );
-    }
 
 
 
 // pobiera (nazwy) wszystkie kierunki na danym wydziale na danym semestrze
   getFieldsOfStudy() {
       //console.log(this.semestr$);
-      this.FieldsOfStudy$ = this.httpService.getFieldsOfStudy(this.semestr$, this.wydzial$).pipe(
+      this.FieldsOfStudy$ = this.httpService.getFieldsOfStudy(this.selectedYear$, this.selectedFaculty$).pipe(
             map(o => o.syllabus),
             // tslint:disable-next-line: max-line-length
             map(syllabus => syllabus.study_types
@@ -333,7 +347,7 @@ clickSubject(){
                   type: studyType.type,
                   level: level.level,
                   subject: subject.name,
-                }})))),
+                };})))),
 
           flatMap(a => from(a)),
           toArray(),
@@ -341,12 +355,12 @@ clickSubject(){
           //map(a => {console.log(a); return a;})
       );
 
-      // this.FieldsOfStudy$.subscribe((res : string[])=> {
-      //   //console.log(res);
-      //   this.listOfNames = res;
-      //   //console.log(this.listOfNames[3]);
-      //  // this.getPosts(this.listOfNames[0]);
-      // });
+      this.FieldsOfStudy$.subscribe((res : string[])=> {
+        console.log(res);
+        this.listOfNames = res;
+        console.log(this.listOfNames[3]);
+       //this.getPosts(this.listOfNames[0]);
+      });
     }
 
     // skopiowana wersja działąjąca
@@ -383,10 +397,244 @@ clickSubject(){
 
     }
 
+    checkIfFilledDescription(){
+      this.getDescriptionOfSubjects$ = from(this.slug$).pipe(
+        flatMap(slug => this.httpService.getSubjects(slug, this.selectedYear$).pipe(
+          map(o => o.syllabus.assignments
+            .map(assignmentWrapper => { return {
+              name: assignmentWrapper.assignment.module.name,
+              code: assignmentWrapper.assignment.module_code,
+              description: assignmentWrapper.assignment.module.description
+            };}))
+          )),
+        flatMap(a => from(a)),
+        toArray()
+      );
+    }
 
+
+
+      //do szukania pustych miejsc w syllabusie (dla prowadzących) do wypełnienia, to samo co wyżej tylko dostaje się dodatkowo do zewnetrznego obiektu
+      // zeby pobrac url
+      getSubjectsWithQueryInLecturev2() {
+        this.allSubjectsLecture$ = from(this.slug$).pipe(
+          flatMap(slug => this.httpService.getDataForSearch(slug, this.selectedYear$).pipe(
+            map(o => o.syllabus.assignments
+              .map(assignmentsWrapper => new SimpleModulev1(assignmentsWrapper.assignment))
+            )
+          )),
+
+          flatMap(a => from(a)),
+
+          toArray(),
+          // map(a => JSON.stringify(a, null, 2))
+        );
+       // this.getFieldsOfStudy();
+
+        }
+
+
+
+        getSubjectsWithQueryInLecturev3() {
+          this.allSubjectsLecture$ = from(this.slug$).pipe(
+            flatMap(slug => this.httpService.getDataForSearch(slug, this.selectedYear$).pipe(
+              map(o => o.syllabus.assignments
+                .map(assignmentWrapper => new SimpleModulev4(assignmentWrapper.assignment.module))
+                .filter(simpleActivityv3 => simpleActivityv3.matches(this.query$))
+              )
+            )),
+
+            flatMap(a => from(a)),
+
+            toArray(),
+            map(a => JSON.stringify(a, null, 2))
+          );
+         // this.getFieldsOfStudy();
+
+          }
+
+
+          //szuka w opisach przedmiotów zapytania i potem je zwraca
+    getSubjectsWithQueryInLecture() {
+      this.allSubjectsLecture$ = from(this.slug$).pipe(
+        flatMap(slug => this.httpService.getSubjects(slug, this.selectedYear$).pipe(
+          map(o => o.syllabus.assignments
+            .map(assignmentWrapper => new SimpleModule(assignmentWrapper.assignment.module))
+            .filter(simpleActivity => simpleActivity.matches(this.query$))
+          )
+        )),
+
+        flatMap(a => from(a)),
+
+        toArray(),
+        // map(a => JSON.stringify(a, null, 2))
+      );
+     // this.getFieldsOfStudy();
+
+      }
+
+  }
+
+
+
+abstract class Matchable {
+    abstract matches(query: string): boolean;
+
+    protected valueMatches(value: string, query: string): boolean {
+      if (query == null || query == "") return true;
+      return value != null && value.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) != -1;
+    }
+  }
+
+class SimpleActivity extends Matchable {
+    type: string;
+    description: string;
+
+    constructor(module_activity) {
+      super();
+      this.type = module_activity.type,
+      this.description = module_activity.module_classes.map(m => m.module_class.description).join();
+    }
+
+    matches(query: string): boolean {
+      return this.valueMatches(this.type, query) || this.valueMatches(this.description, query);
+    }
+  }
+
+class SimpleModule extends Matchable {
+    name: string;
+    description: string;
+    activities: Array<SimpleActivity>;
+
+    constructor(module) {
+      super();
+      this.name = module.name,
+      this.description = module.description,
+      this.activities = module.module_activities.map(activity => new SimpleActivity(activity.module_activity));
+    }
+
+    matches(query: string): boolean {
+      return this.valueMatches(this.name, query) ||
+        this.valueMatches(this.description, query) ||
+        this.activities.filter(activity => activity.matches(query)).length > 0;
+    }
+
+}
+
+
+///////////////////////////////////////// Prawie to samo co wyżej ale zrobione żeby można było sprawdzać poszczególne dane (punkt 7 z celów)
+//
+class SimpleActivityv2 {
+  type: string;
+  description: string;
+
+  constructor(module_activity) {
+    this.type = module_activity.type,
+    this.description = module_activity.module_classes.map(m => m.module_class.description).join();
+  }
+}
+
+class SimpleModulev2 {
+  name: string;
+  description: string;
+  literature: string;
+  notices: string;
+  activities: Array<SimpleActivityv2>;
+
+  constructor(module) {
+    this.name = module.name,
+    this.description = module.description,
+    this.notices = module.notices,
+    this.literature = module.literature,
+    this.activities = module.module_activities.map(activity => new SimpleActivityv2(activity.module_activity));
+  }
+}
+
+class SimpleModulev1 {
+  module_id: string;
+  module_url: string;
+  module: SimpleModulev2;
+
+  constructor(assignment) {
+    this.module_id = assignment.module_id;
+    this.module_url = assignment.module_url;
+    this.module = new SimpleModulev2(assignment.module);
+  }
+
+}
+
+/////////////////////////////////////////////////// Do szukania przedmiotu - wypisuje nazwe, pobieram module_id które wysyłam dalej/////
+
+
+abstract class Matchablev3 {
+  abstract matches(query: string): boolean;
+
+  protected valueMatches(value: string, query: string): boolean {
+    if (query == null || query == "") return true;
+    return value != null && value.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) != -1;
+  }
+}
+
+class SimpleActivityv3 extends Matchablev3 {
+  type: string;
+  description: string;
+
+  constructor(module_activity) {
+    super();
+    this.type = module_activity.type,
+    this.description = module_activity.module_classes.map(m => m.module_class.description).join();
+  }
+
+  matches(query: string): boolean {
+    return this.valueMatches(this.type, query) || this.valueMatches(this.description, query);
+  }
+}
+
+class SimpleModulev3 extends Matchablev3 {
+  name: string;
+  literature: string;
+  notices: string;
+  description: string;
+  activities: Array<SimpleActivityv3>;
+
+  constructor(module) {
+    super();
+    this.name = module.name,
+    this.notices = module.notices,
+    this.literature = module.literature,
+    this.description = module.description,
+    this.activities = module.module_activities.map(activity => new SimpleActivityv3(activity.module_activity));
+  }
+
+  matches(query: string): boolean {
+    return this.valueMatches(this.name, query) ||
+      this.valueMatches(this.description, query) ||
+      this.activities.filter(activity => activity.matches(query)).length > 0;
+  }
+
+}
+
+class SimpleModulev4 extends Matchablev3{
+  module_id: string;
+  module_url: string;
+  module: SimpleModulev3;
+  activities: Array<SimpleActivityv3>;
+
+  constructor(assignment) {
+    super();
+    this.module_id = assignment.module_id;
+    this.module_url = assignment.module_url;
+    this.module = new SimpleModulev3(assignment.module);
+    this.activities = assignment.module.module_activities.map(activity => new SimpleActivityv3(activity.module_activity));
+  }
+
+  matches(query: string): boolean {
+    return this.valueMatches(this.module_id, query) || this.valueMatches(this.module.name, query)
+  }
 
 
 }
+
 
 export interface Post {
   id?: number;

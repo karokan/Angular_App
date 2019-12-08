@@ -1,0 +1,82 @@
+<div class="container">
+    <div class= "row">
+      <div class="col-xs-12">
+        <h3> Search blank fields </h3>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+    <h4>Select: </h4>
+      <div
+        class="btn-group"
+        appDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle" >
+          Year <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li *ngFor="let c of faculty$.year$; let i=index" >
+            <a class="dropdown-item" href="#" (click)= onChange(c) > {{ c }} </a>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="btn-group"
+        appDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle">
+          Wydział <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" >
+          <li *ngFor="let c of faculty$.name$, let i=index " >
+            <a class="dropdown-item" href="#" (click)= onChangeShortCut(i)> {{ c }} </a>
+          </li>
+        </ul>
+
+      </div>
+
+      <div class="row">
+          <div class="col-xs-12">
+              <button type="button" class="btn btn-primary" (click)="getSubjectsWithQueryInLecturev2()" > Search </button>
+          </div>
+        </div>
+
+
+
+
+<!--
+      <form>
+          <div *ngFor= "let x of allSubjectsLecture$ | async let i=index ">
+            <div *ngIf= "x.module.description ==='Do wypełnienia' || x.module.description==='.' || !x.module.description" (click)= "clickSubject(i)" >
+             Description do wypełnienia: {{x.module.name}}
+            </div>
+            <div *ngIf="x.notices === '-' || !x.notices" (click)= "clickSubject(i)">
+              Notices do wypełnienia: {{x.module.name}}
+              Module URL: {{x.module_url}}
+            </div>
+           </div>
+      </form> -->
+
+
+      <div class="row">
+          <div class="col-xs-12">
+            <a
+            href="#"
+            class= "list-group-item clearfix"
+            *ngFor= "let x of allSubjectsLecture$ | async let i=index ">
+            <div *ngIf= "x.module.description ==='Do wypełnienia' || x.module.description==='.' || !x.module.description" >
+                Description do wypełnienia: {{x.module.name}}
+               </div>
+               <div *ngIf="x.notices === '-' || !x.notices">
+                 Notices do wypełnienia: {{x.module.name}}
+                 <hr>
+                 Module URL: {{x.module_url}}
+               </div>
+            </a>
+
+          </div>
+        </div>
