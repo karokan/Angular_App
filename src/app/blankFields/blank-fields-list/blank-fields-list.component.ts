@@ -25,6 +25,7 @@ export class BlankFieldsListComponent implements OnInit {
   listOfUrl: string[] = [];
   slugNumberInUrl: number;
   year$: string;
+  check$: boolean = false;
 
   faculty$: Faculty = new Faculty();
 

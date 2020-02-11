@@ -15,6 +15,9 @@ import { FacultySingleComponent } from './faculties/faculty-list/faculty-single/
 import { DropdownDirective } from './shared/dropdown.directive';
 import { BlankFieldsListComponent } from './blankFields/blank-fields-list/blank-fields-list.component';
 import { SearchSubjectListComponent } from './searchSubject/search-subject-list/search-subject-list.component';
+import { ShowSubjectsListComponent } from './showSubjects/show-subjects-list/show-subjects-list.component';
+import { ShowAllSubjectsListComponent } from './showAllSubjects/show-all-subjects-list/show-all-subjects-list.component';
+import { CompareFieldsOfStudyListComponent } from './compareFieldsOfStudy/compare-fields-of-study-list/compare-fields-of-study-list.component';
 
 
 @NgModule({
@@ -27,7 +30,10 @@ import { SearchSubjectListComponent } from './searchSubject/search-subject-list/
     FacultySingleComponent,
     DropdownDirective,
     BlankFieldsListComponent,
-    SearchSubjectListComponent
+    SearchSubjectListComponent,
+    ShowSubjectsListComponent,
+    ShowAllSubjectsListComponent,
+    CompareFieldsOfStudyListComponent
   ],
   imports: [
     BrowserModule,

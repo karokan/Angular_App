@@ -101,7 +101,7 @@ export class SearchSubjectListComponent implements OnInit {
       flatMap(a => from(a)),
       filter((subject: string) => subject.indexOf(this.query$) >= 0),
       toArray(),
-      map(a => {console.log(a); return a;})
+      map(a => {console.log(a); return a; })
     );
     }
 
@@ -126,7 +126,6 @@ export class SearchSubjectListComponent implements OnInit {
 
       subjectId(x){
         console.log(x);
-        //console.log('test');
       }
 
 }
@@ -134,7 +133,7 @@ export class SearchSubjectListComponent implements OnInit {
 
 
 
-/////////////////////////////////////////////////// Do szukania przedmiotu - wypisuje nazwe, pobieram module_id które wysyłam dalej/////
+///////////////// Do szukania przedmiotu - wypisuje nazwe, pobieram module_id które wysyłam dalej/////
 
 
 abstract class Matchablev3 {
@@ -180,7 +179,7 @@ class SimpleModulev4 extends Matchablev3{
   }
 
   matches(query: string): boolean {
-    return this.valueMatches(this.module.name, query);
+    return this.valueMatches(this.module.name, query) || this.module.matches(query);
   }
 
 

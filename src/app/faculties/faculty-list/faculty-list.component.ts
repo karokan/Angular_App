@@ -159,7 +159,7 @@ export class FacultyListComponent implements OnInit {
 //       //console.log(this.slug$);
 //   });
 
-  this.allSubjects$ = this.httpService.getSubjects(this.slugForUrl$, '2017-2018').pipe(
+  this.allSubjects$ = this.httpService.getSubjects(this.slugForUrl$, this.selectedYear$).pipe(
       map(o => o.syllabus.assignments
         .map(assignmentWrapper => { return {
           name: assignmentWrapper.assignment.module.name,
@@ -168,7 +168,5 @@ export class FacultyListComponent implements OnInit {
         }}))
       );
     //map(a => {console.log(a); return a;})
-
-
       }
 }

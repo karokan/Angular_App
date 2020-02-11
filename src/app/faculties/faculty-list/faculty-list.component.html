@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-xs-12">
-      <button class="btn btn-success"  [disabled]="query$ === '' " (click)="getFieldsOfStudy()"> Select Year</button>
+      <button class="btn btn-success"  [disabled]="query$ === '' " (click)="getFieldsOfStudy()"> Wybierz rok </button>
     </div>
-  </div>
+</div>
 
   <div class="row">
     <div class="col-xs-12">
@@ -35,10 +35,8 @@
           <h4 class="list-group-item-heading" (click)="fields(i)"> {{ faculty }} </h4>
         </div>
       </a>
-
     </div>
   </div>
-
 
   <hr>
   <div class="row">
@@ -52,12 +50,10 @@
           <!-- {{p.type}} -->
           <!-- {{p.level}} -->
           {{p.subject}}
-           </div>
-
+          </div>
       </a>
     </div>
     </div>
-
   </div>
 
 
@@ -83,7 +79,7 @@
       <app-faculty-single
         [faculty]="allSubjects$"
         ></app-faculty-single>
-    </div>
+  </div>
   </div>
 
 

@@ -2,8 +2,9 @@ import { Component, OnInit, Input, SimpleChange, SimpleChanges, OnChanges } from
 import { NumberSymbol } from '@angular/common';
 import { HttpService } from './http.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, from, empty, EMPTY, concat } from 'rxjs';
-import { map, flatMap, tap,  reduce, mergeAll, toArray, filter } from 'rxjs/operators';
+
+import { Observable, from} from 'rxjs';
+import { map, flatMap, toArray, filter } from 'rxjs/operators';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class AppComponent implements OnInit {
   FieldsOfStudy$: Observable<any>;
   SubjectsField$: Observable<any>;
   allPosts$: Observable<any>;
+  allPostsv2$: Observable<any>;
   testowyNgOnInit$: Observable<any>;
   semestr$: string = '2013-2014';
   wydzial$: string = 'wgig';
@@ -90,7 +92,7 @@ export class AppComponent implements OnInit {
     // Pobieranie danych z api w trakcie uruchomienia programu
     ngOnInit() {
 
-      this.onChange(this.selectedFaculty$);
+     this.onChange(this.selectedFaculty$);
 
 
 
@@ -130,16 +132,13 @@ export class AppComponent implements OnInit {
             .flatMap(subject => subject.url))))
           );
 
-              this.urlForSlug$.subscribe((res : string[]) => {
-          //console.log(res);
-          this.listOfUrl = res;
-          console.log(this.listOfUrl[0]);
+              this.urlForSlug$.subscribe((res: string[]) => {
+              this.listOfUrl = res;
 
           for(let i=0; i < this.listOfUrl.length; i++){
-            this.slugNumberInUrl = this.listOfUrl[i].lastIndexOf("/");  // podaje numer ostatniego wystąpienia wystąpienia podtekstu
+            this.slugNumberInUrl = this.listOfUrl[i].lastIndexOf("/");
 
-            this.slug$[i] = this.listOfUrl[i].substr(this.slugNumberInUrl + 1 ); // pobiera kawałek tekstu, pramter to poczatek pobieranego kawałka tekstu
-
+            this.slug$[i] = this.listOfUrl[i].substr(this.slugNumberInUrl + 1 );
             //console.log(this.slug$);
             }
         });
@@ -156,57 +155,17 @@ clickSubject(i){
   console.log(this.slug$[i]);
 }
 
-  // uses result of one http call to perform another
-  getTwoPhasesSimple() {
-    this.twoPhasesSimple = this.httpService.getAllModulesByStudyMode().pipe(
-      map(o => o.syllabus.assignments[0].assignment.module_code),               // take the result of first http call and map it to module code of first assignment
-      flatMap(moduleId => this.httpService.getModuleByStudyMode(moduleId)),     // maps moduleId to another http call. map would be used then we would have Observale<Oservable<any>>. flatMap unpacks inner observable. so we have Observale<any>
-      map(o => JSON.stringify(o.syllabus.assignments[0].assignment, null, 2))   // maps result of second call to something that we could display
-    );
-  }
-
-
-  // uses result of one http call to perform variable number of calls.
-  getTwoPhasesAdvanced() {
-    this.twoPhasesAdvanced = this.httpService.getAllModulesByStudyMode().pipe(
-      // take the result of first call and map it
-      map(o => o.syllabus.assignments),
-      // observable<array<assignmentObject>>           //this observable contains single array
-
-      // map each object in array to module_code
-      map(assignments => assignments.map(assignmentObject => assignmentObject.assignment.module_code)),
-      // observable<array<module_code>>                //this observable contains single array
-
-      // map the array to observable and flat it (to have observable of module_code instead of obsevable of observable of module code)
-      flatMap(module_codes => from(module_codes)),
-      // observable<module_code>                       //this observable contains multiple module_codes
-
-      // flatMap every module_code to another http call (resulting in observables)
-      flatMap(module_code => this.httpService.getModuleByStudyMode(module_code as string)),   //we need to provide type for typechecker
-      // observable<module_object>                     //this observable contains multiple results of http calls for each module_code
-
-      // map every module_object to something that can be displayed
-      map(o =>  JSON.stringify(o.syllabus.assignments[0].assignment, null, 2)),
-      // observable<string>                            //this observable contains multiple strings
-
-      // now turn it back to an observable that contains single array
-      toArray()
-      // observable<array<string>>
-    );
-  }
 
 
 
-  // posts zmienna do której wpadają dane z jsona poprzez observable i subksrypcje
-   getPosts() {
+  getPostsv2() {
     for (let i = 0; i < this.testArray$.length; i++) {
       this.kierunek$ = this.testArray$[i];
       console.log(this.kierunek$);
-      this.allPosts$ = this.httpService.getPosts().pipe(
+      this.allPostsv2$ = this.httpService.getPostsv2().pipe(
         map(o => JSON.stringify(o, null, 2))
     );
     }
-
    // console.log(this.listOfNames[0]);
   }
 
@@ -214,39 +173,6 @@ clickSubject(i){
     // console.log(this.semestr$);
     console.log('Ala ma kota');
   }
-
-  // bez sybskrypcji linijka 17**
-  // do tego observable ktorego stworzylismy - linijka 20** dopisujemy to co zwraca nasze zapytania
-
-  // getTest() {
-  //   for (let i = 0; i < this.testArray$.length; i++) {
-  //     this.kierunek$ = this.testArray$[i];
-  //     console.log(this.kierunek$);
-  //     this.urlForSlug = this.httpService.getTest().pipe(
-  //       map(o => o.syllabus),
-  //       map(syllabus => (JSON.stringify(syllabus) + " ala ma kota"))
-  //       );
-  //   }
-  // }
-
-  // Pobiera URL z "Lista programów studiów danego wydziału" po to aby potem z nich wyciągnać slugi // zapisywanie urli do tablicy listOfUrl
-  // lepiej to bedzie pobierac w ngOnInit ale zrobi się to później // przeniesione do ngOnInit
-  // getUrlForSlug() {
-  //     this.urlForSlug$ = this.httpService.getUrlForSlug().pipe(map(o => o.syllabus),
-  //     map(syllabus => syllabus.study_types
-  //       .flatMap(studyType => studyType.levels //flatmapa potrzebna gdy tablica w tablicy
-  //         .flatMap(level => level.study_programmes
-  //         .flatMap(subject => subject.url))))
-  //       );
-
-  //     this.urlForSlug$.subscribe((res : string[])=> {
-  //       //console.log(res);
-  //       this.listOfUrl = res;
-  //       console.log(this.listOfUrl[0]);
-  //     })
-  // }
-
-
 
 
   getSubjectsWithQuery() {
@@ -258,7 +184,7 @@ clickSubject(i){
       flatMap(a => from(a)),
       filter((subject: string) => subject.indexOf(this.query$) >= 0),
       toArray(),
-      map(a => {console.log(a); return a;})
+      map(a => {console.log(a); return a; })
     );
     }
 
@@ -439,7 +365,7 @@ clickSubject(i){
           this.allSubjectsLecture$ = from(this.slug$).pipe(
             flatMap(slug => this.httpService.getDataForSearch(slug, this.selectedYear$).pipe(
               map(o => o.syllabus.assignments
-                .map(assignmentWrapper => new SimpleModulev4(assignmentWrapper.assignment.module))
+                .map(assignmentWrapper => new SimpleModulev4(assignmentWrapper.assignment))
                 .filter(simpleActivityv3 => simpleActivityv3.matches(this.query$))
               )
             )),

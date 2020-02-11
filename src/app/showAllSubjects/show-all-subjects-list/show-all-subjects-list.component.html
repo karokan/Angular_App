@@ -1,0 +1,43 @@
+<div class="container">
+    <div class= "row">
+      <div class="col-xs-12">
+        <h3> Pokaż wszystkie przedmioty na uczelni </h3>
+      </div>
+    </div>
+  </div>
+
+  <h4>Wybierz: </h4>
+  <div
+    class="btn-group"
+    appDropdown>
+    <button
+      type="button"
+      class="btn btn-primary dropdown-toggle" >
+      Rok <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li *ngFor="let c of faculty$.year$; let i=index"  (ngModelChange)="onChange($event)">
+        <a class="dropdown-item" href="#" (click)= onChange(c) > {{ c }} </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="row">
+      <div class="col-xs-12">
+          <button type="button" class="btn btn-primary" (click)="getSubjectsWithName()"  > Pokaż </button>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-xs-12">
+        <a
+        href="#"
+        class= "list-group-item clearfix"
+        *ngFor= "let subject of allSubjects$ | async">
+
+       {{subject.name}}
+
+        </a>
+
+      </div>
+  </div>

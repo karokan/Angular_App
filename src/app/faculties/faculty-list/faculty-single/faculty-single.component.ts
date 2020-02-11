@@ -12,6 +12,7 @@ export class FacultySingleComponent implements OnInit {
   //@Input() faculty: Faculty = new Faculty();
   //@Input() faculty: {type: string; name: string};
   @Input() faculty: Observable<any>;
+  @Input() faculty3: Observable<any>;
 
 
 

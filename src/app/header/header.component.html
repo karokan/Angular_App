@@ -1,21 +1,21 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a href= "#" class="navbar-brand"> AI system  </a>
+      <a href= "http://localhost:8898/" class="navbar-brand"> Start  </a>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li> <a href="#" (click)="onSelect('faculty')"> Faculties </a> </li>
-        <li> <a href="#" > Compare Fields Of Study </a> </li>
-        <li> <a href="#" (click)="onSelect('blank-field')" > Search blank fields </a> </li>
-        <li> <a href="#" (click)="onSelect('search-subject')"> Search a subject </a> </li>
+        <li> <a href="#" (click)="onSelect('faculty')"> Wydziały </a> </li>
+        <li> <a href="#" (click) ="onSelect('compare-fields')"> Porównaj kierunki studiów </a> </li>
+        <li> <a href="#" (click)="onSelect('blank-field')" > Wyszukaj niewypełnione dane w Syllabusie</a> </li>
+        <li> <a href="#" (click)="onSelect('search-subject')"> Wyszukaj przedmiot </a> </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" appDropdown>
-          <a href="#" class="dropdown-toggle" role="button" > Show <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" role="button" > Pokaż <span class="caret"></span></a>
           <ul class= "dropdown-menu">
-            <li><a href="#">Show all subjects on Faculty on academy</a></li>
-            <li><a href="#">Show all subjects on academy</a></li>
+            <li><a href="#" (click) ="onSelect('show-subjects')">Wszystkie przedmioty na wybranym wydziale</a></li>
+            <li><a href="#" (click) = "onSelect('show-all-subjects')">Wszystkie przedmioty na uczelni</a></li>
 
           </ul>
         </li>

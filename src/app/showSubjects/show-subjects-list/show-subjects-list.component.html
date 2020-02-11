@@ -1,0 +1,231 @@
+<div class="container">
+    <div class= "row">
+      <div class="col-xs-12">
+        <h3> Pokaż wszystkie przedmioty na wydziale </h3>
+      </div>
+    </div>
+  </div>
+
+
+  <h4>Wybierz: </h4>
+  <div
+    class="btn-group"
+    appDropdown>
+    <button
+      type="button"
+      class="btn btn-primary dropdown-toggle" >
+      Rok <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li *ngFor="let c of faculty$.year$; let i=index" >
+        <a class="dropdown-item" href="#" (click)= onChange(c) > {{ c }} </a>
+      </li>
+    </ul>
+  </div>
+
+  <div
+        class="btn-group"
+        appDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle">
+          Wydział <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" >
+          <li *ngFor="let c of faculty$.name$, let i=index " >
+            <a class="dropdown-item" href="#" (click)= onChangeShortCut(i)> {{ c }} </a>
+          </li>
+        </ul>
+</div>
+
+
+<div
+class="btn-group"
+appDropdown>
+<button
+  type="button"
+  class="btn btn-primary dropdown-toggle">
+  Semestr <span class="caret"></span>
+
+</button>
+<ul class="dropdown-menu" >
+  <li *ngFor="let c of faculty$.semestr$, let i=index " >
+    <a class="dropdown-item" href="#" (click)= onChangeShortCutSemestr(i) > {{ c }}  </a>
+  </li>
+</ul>
+</div>
+
+<div
+class="btn-group"
+appDropdown>
+<button
+  type="button"
+  class="btn btn-primary dropdown-toggle">
+  Okres trwania semestru <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" >
+  <li *ngFor="let c of faculty$.czas$, let i=index " >
+    <a class="dropdown-item" href="#" (click)= onChangeShortCutSemestr2(i) > {{ c }}  </a>
+  </li>
+</ul>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <button type="button" class="btn btn-primary" (click)="getSubjectsWithName()" > Pokaż </button>
+    </div>
+</div>
+
+
+
+    <div class="row" *ngIf="warunek$ === true; else another">
+        <div class="col-xs-12">
+            <ng-container  *ngFor= "let subject of allSubjects$ | async">
+
+              <div *ngIf= "subject.semester === numerSemestru$ ">
+
+                  <a
+                  class= "list-group-item clearfix"
+                  href="{{subject.module_url}}">
+
+          {{subject.name}}
+          <br>
+          <h6>
+             Semestr: {{subject.semester}}
+          </h6>
+
+          <hr>
+          {{subject.description}}
+
+          <!-- {{numerSemestru$}} -->
+          <!-- <br>
+          <h6>
+              {{subject.semester}}
+          </h6>
+          <hr>
+          {{subject.description}} -->
+          <!-- {{subject.code}}-->
+          <!-- {{subject.module_url}} -->
+        </a>
+        </div>
+
+        </ng-container>
+        </div>
+    </div>
+
+    <ng-template #another>
+        <div class="row" *ngIf="warunek$ !== true && warunek2$ !==true; else sprawdz">
+            <div class="col-xs-12">
+                <ng-container  *ngFor= "let subject of allSubjects$ | async">
+
+                      <a
+                      class= "list-group-item clearfix"
+                      href="{{subject.module_url}}">
+
+              {{subject.name}}
+              <br>
+              <h6>
+                 Semestr: {{subject.semester}}
+              </h6>
+
+              <hr>
+              {{subject.description}}
+
+              <!-- {{numerSemestru$}} -->
+              <!-- <br>
+              <h6>
+                  {{subject.semester}}
+              </h6>
+              <hr>
+              {{subject.description}} -->
+              <!-- {{subject.code}}-->
+              <!-- {{subject.module_url}} -->
+            </a>
+
+            </ng-container>
+            </div>
+        </div>
+    </ng-template>
+
+
+    <ng-template #sprawdz>
+    <div class="row" *ngIf="warunek2$ === true && czas$ === 2; else sprawdzletni ">
+        <div class="col-xs-12">
+            <ng-container  *ngFor= "let subject of allSubjects$ | async">
+
+              <div *ngIf= "subject.semester === 1 || subject.semester === 3 || subject.semester === 5 || subject.semester === 7">
+
+                  <a
+                  class= "list-group-item clearfix"
+                  href="{{subject.module_url}}">
+
+          {{subject.name}}
+          <br>
+          <h6>
+            Okres trwania semestru: Zimowy
+            <br>
+            Semestr: {{subject.semester}}
+          </h6>
+
+          <hr>
+          {{subject.description}}
+
+          <!-- {{numerSemestru$}} -->
+          <!-- <br>
+          <h6>
+              {{subject.semester}}
+          </h6>
+          <hr>
+          {{subject.description}} -->
+          <!-- {{subject.code}}-->
+          <!-- {{subject.module_url}} -->
+        </a>
+        </div>
+
+        </ng-container>
+        </div>
+    </div>
+
+  </ng-template>
+
+
+  <ng-template #sprawdzletni>
+      <div class="row" *ngIf="warunek2$ === true && czas$ === 1">
+          <div class="col-xs-12">
+              <ng-container  *ngFor= "let subject of allSubjects$ | async">
+
+                <div *ngIf= "subject.semester === 2 || subject.semester === 4 || subject.semester === 6">
+
+                    <a
+                    class= "list-group-item clearfix"
+                    href="{{subject.module_url}}">
+
+            {{subject.name}}
+            <br>
+            <h6>
+              Okres trwania semestru: Letni
+              <br>
+              Semestr: {{subject.semester}}
+            </h6>
+
+            <hr>
+            {{subject.description}}
+
+            <!-- {{numerSemestru$}} -->
+            <!-- <br>
+            <h6>
+                {{subject.semester}}
+            </h6>
+            <hr>
+            {{subject.description}} -->
+            <!-- {{subject.code}}-->
+            <!-- {{subject.module_url}} -->
+          </a>
+          </div>
+
+          </ng-container>
+          </div>
+      </div>
+  </ng-template>
+
+    <!-- <input type= "checkbox" ([ngModel])="subject" > {{subject.name}} -->

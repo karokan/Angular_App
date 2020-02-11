@@ -1,0 +1,85 @@
+<div class="container">
+    <div class= "row">
+      <div class="col-xs-12">
+        <h3> Porównaj kierunki studiów</h3>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+    <h4>Wybierz: </h4>
+      <div
+        class="btn-group"
+        appDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle" >
+          Rok <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li *ngFor="let c of faculty$.year$; let i=index" >
+            <a class="dropdown-item" href="#" (click)= onChange(c) > {{ c }} </a>
+          </li>
+        </ul>
+      </div>
+
+
+      <hr>
+      <div class="row">
+        <div class="col-xs-6">
+          <a
+          href="#"
+          class= "list-group-item clearfix"
+          *ngFor="let faculty of faculty$.name$, let i=index">
+          <div class="pull-left">
+              <h4 class="list-group-item-heading" (click)="fields(i)" > {{ faculty }} </h4>
+          </div>
+        </a>
+            <a
+          href="#"
+           *ngFor="let p of FieldsOfStudy$ | async, let i=index">
+              <div class= "list-group-item-text" (click) = "testowy2(i)" >
+              {{p.type}}
+              {{p.level}}
+              {{p.subject}}
+              </div>
+          </a>
+
+          <app-faculty-single
+          [faculty]="allSubjects$"
+          ></app-faculty-single>
+
+        </div>
+        <div class="col-xs-6">
+           <a
+          href="#"
+          class= "list-group-item clearfix"
+          *ngFor="let faculty of faculty$.name$, let i=index">
+          <div class="pull-left">
+              <h4 class="list-group-item-heading" (click)="fields2(i)" > {{ faculty }} </h4>
+          </div>
+        </a>
+        <a
+        href="#"
+         *ngFor="let p of FieldsOfStudy2$ | async, let i=index">
+            <div class= "list-group-item-text" (click) = "testowy3(i)" >
+            {{p.type}}
+            {{p.level}}
+            {{p.subject}}
+            </div>
+        </a>
+
+        <app-faculty-single
+          [faculty3]="allSubjects2$"
+          ></app-faculty-single>
+
+        </div>
+      </div>
+
+      <!-- <div class="row">
+          <div class="col-xs-12">
+              <app-faculty-single
+                [faculty]="allSubjects$"
+                ></app-faculty-single>
+          </div>
+      </div> -->

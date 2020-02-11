@@ -1,6 +1,54 @@
-<div class="pull-left">
-    <h4 class="list-group-item-heading" *ngFor="let a of faculty | async"> {{ a.name }} </h4>
+
+<div class="row">
+  <div class="col-xs-12">
+    <a   href="#"
+    class= "list-group-item clearfix" *ngFor="let a of faculty | async">
+           Nazwa: {{ a.name }}
+           <br>
+           Punkty ects: {{a.ectsPoints}}
+           <br>
+           Opis: {{a.description}}
+           <hr>
+           Wymagania wstępne: {{a.prerequisites}}
+           <br>
+           Uwagi: {{a.notices}}
+           <!-- <br>
+           Literatura: {{a.literature}} -->
+       </a>
+
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <a   href="#"
+        class= "list-group-item clearfix" *ngFor="let a of faculty3 | async">
+               Nazwa: {{ a.name }}
+               <br>
+               Punkty ects: {{a.ectsPoints}}
+               <br>
+               Opis: {{a.description}}
+               <hr>
+               Wymagania wstępne: {{a.prerequisites}}
+               <br>
+               Uwagi: {{a.notices}}
+               <!-- <br>
+               Literatura: {{a.literature}} -->
+           </a>
+    </div>
 </div>
 
 
 <!-- <p>faculty-single works!</p> -->
+
+<!-- <div class="row">
+    <div class="col-xs-12">
+      <h4 class="list-group-item-heading" *ngFor="let a of faculty | async"> {{ a.name }} {{a.ectsPoints}}</h4>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-xs-12">
+        <h4 class="list-group-item-heading" *ngFor="let a of faculty3 | async"> {{ a.name }} </h4>
+      </div>
+    </div> -->

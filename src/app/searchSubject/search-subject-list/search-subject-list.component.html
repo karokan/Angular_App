@@ -1,21 +1,21 @@
 <div class="container">
     <div class= "row">
       <div class="col-xs-12">
-        <h3> Search a subjects name </h3>
+        <h3> Szukaj nazwy przedmiotu </h3>
       </div>
     </div>
   </div>
 
 
   <hr>
-    <h4>Select: </h4>
+    <h4>Wybierz: </h4>
       <div
         class="btn-group"
         appDropdown>
         <button
           type="button"
           class="btn btn-primary dropdown-toggle" >
-          Year <span class="caret"></span>
+          Rok <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
           <li *ngFor="let c of faculty$.year$; let i=index" >
@@ -37,16 +37,15 @@
             <a class="dropdown-item" href="#" (click)= onChangeShortCut(i)> {{ c }} </a>
           </li>
         </ul>
-
       </div>
 
       <hr>
-      Query: <input type= "text" class="form-control" [(ngModel)]="query$">
+      Wpisz nazwe: <input type= "text" class="form-control" [(ngModel)]="query$">
       <hr>
 
       <div class="row">
           <div class="col-xs-12">
-              <button type="button" class="btn btn-primary" (click)="getSubjectsWithQueryInLecturev3()" > Search </button>
+              <button type="button" class="btn btn-primary" (click)="getSubjectsWithQueryInLecturev3()" > Szukaj </button>
           </div>
       </div>
 
@@ -57,17 +56,17 @@
        <div class="row">
           <div class="col-xs-12">
             <a
-            href="#"
-            class= "list-group-item clearfix"
-                *ngFor= "let x of allSubjectsLecture$ | async let i=index " (click) = "subjectId(x.module_id)">
-                   {{x.module.name}}
-                   {{x.module_id}}
-            </a>
 
+            class= "list-group-item clearfix"
+                *ngFor= "let x of allSubjectsLecture$ | async let i=index " (click) = "subjectId(x.module_id)"
+                href="{{x.module_url}}" >
+                   {{x.module.name}}
+                   <br>{{x.module.description}}
+                   <!-- {{x.module_id}} -->
+                   <hr>
+                 Module URL: {{x.module_url}}
+            </a>
           </div>
         </div>
 
         <!-- <pre>{{allSubjectsLecture$ | async}}</pre> -->
-
-        <button (click)=" moduleIdFunction()"> ModuleIdTest </button>
-       <pre>  {{dataModuleId$ | async}} </pre>

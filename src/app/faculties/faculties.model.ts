@@ -8,6 +8,10 @@ export class Faculty {
   public shortcut$: Array <string> = ['weaiiib', 'weip', 'wfiis', 'wggiis', 'wggios', 'wgig', 'wh','wieit', 'wimic', 'wimiip', 'wimir','wmn','wms', 'wo', 'wwnig', 'wz'];
 
   public year$: Array <string> = ['2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', '2017-2018', '2018-2019', '2019-2020'];
+
+  public semestr$: Array <string> = ['Semestr I', 'Semestr II', 'Semestr III', 'Semestr IV', 'Semestr V', 'Semestr VI', 'Semestr VII'];
+
+  public czas$: Array <string> = ['Letni', 'Zimowy'];
   constructor(){
 
   }
